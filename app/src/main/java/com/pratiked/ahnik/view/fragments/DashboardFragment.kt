@@ -9,24 +9,37 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pratiked.ahnik.R
+import com.pratiked.ahnik.databinding.FragmentDashboardBinding
 import com.pratiked.ahnik.viewmodel.DashboardViewModel
 
 class DashboardFragment : Fragment() {
 
     private lateinit var dashboardViewModel: DashboardViewModel
 
+    private var _binding: FragmentDashboardBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
+
         dashboardViewModel =
                 ViewModelProvider(this).get(DashboardViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
-        val textView: TextView = root.findViewById(R.id.text_dashboard)
+
+        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        val root = binding.root
+
         dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
+            binding.textDashboard.text = it
         })
+
         return root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
